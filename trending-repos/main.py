@@ -2,26 +2,23 @@ import click
 from datetime import datetime, timedelta, date
 from api import fetch_repos
 from display import display_repos
+from rich.console import Console
+import questionary
+import os 
 
 @click.command()
 
-@click.option(
-    "--duration", 
-    type=click.Choice(['year', 'month', 'week', 'today'], case_sensitive=False), 
-    default="today", 
-    help="Define the time frame" 
-)
 
-@click.option(
-    "--limit", 
-    type=int, 
-    default=10, 
-    help="The maximum number of items."
-)
-
-def main(duration, limit):
-    click.echo(f"Date successfully set to: {duration}")
-    click.echo(f"Limit successfully set to: {limit}")
+def main():
+    
+    duration = questionary.select(
+    "Choose duration:",
+    choices=["today", "week", "month", "year"]
+    ).ask()
+    
+    limit = int(questionary.text("How many repos to show?", default="10").ask())
+    
+    os.system('cls')
     
     today = datetime.now()
     
@@ -38,11 +35,26 @@ def main(duration, limit):
         start_date = today - timedelta(days=365)
         
     start_date_str = start_date.strftime("%Y-%m-%d")
-    print(start_date_str)
+    # print(start_date_str)
 
-    repos = fetch_repos(start_date_str, limit)
+    console = Console()
+    
+    with console.status("Fetching trending repos..."):
+        repos = fetch_repos(start_date_str, limit)
     
     display_repos(repos, duration)
+    
+    action = questionary.select(
+    "What would you like to do?",
+    choices=["Search again", "Exit"]
+    ).ask()
+    
+    os.system('cls')
+    
+    if action == "Search again":
+        return main()
+    elif action == "Exit":
+        console.print("Goodbye!")
     
 if __name__ == "__main__":
     main()
