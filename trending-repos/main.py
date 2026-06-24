@@ -1,6 +1,7 @@
 import click
 from datetime import datetime, timedelta, date
-# from api
+from api import fetch_repos
+from display import display_repos
 
 @click.command()
 
@@ -38,7 +39,10 @@ def main(duration, limit):
         
     start_date_str = start_date.strftime("%Y-%m-%d")
     print(start_date_str)
+
+    repos = fetch_repos(start_date_str, limit)
     
+    display_repos(repos, duration)
     
 if __name__ == "__main__":
     main()
