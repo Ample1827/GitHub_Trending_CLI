@@ -14,6 +14,7 @@ def fetch_repos(start_date_str, limit):
     response = requests.get(base_url, params=query_params)
     
     data = response.json()
+    
     # print (response.status_code)
-    return data ["items"]
+    return data ["items"][:limit]
     

@@ -9,6 +9,10 @@ def display_repos(repos, duration):
         print (repo["name"])
         print (repo["stargazers_count"])
         print (repo["language"])
-        print (repo["description"])
-        print (repo["html_url"])
+        if repo["description"] is None:
+            print("No description")
+        else:
+            print(repo["description"])
             
+        print(repo["html_url"])
+        print("-" * 20)
