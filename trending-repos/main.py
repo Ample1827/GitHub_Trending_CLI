@@ -1,12 +1,9 @@
-import click
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from api import fetch_repos
 from display import display_repos
 from rich.console import Console
 import questionary
 import os 
-
-@click.command()
 
 
 def main():
@@ -18,7 +15,7 @@ def main():
     
     limit = int(questionary.text("How many repos to show?", default="10").ask())
     
-    os.system('cls')
+    os.system('cls' if os.name == 'nt' else 'clear')
     
     today = datetime.now()
     
@@ -35,7 +32,6 @@ def main():
         start_date = today - timedelta(days=365)
         
     start_date_str = start_date.strftime("%Y-%m-%d")
-    # print(start_date_str)
 
     console = Console()
     
@@ -49,7 +45,7 @@ def main():
     choices=["Search again", "Exit"]
     ).ask()
     
-    os.system('cls')
+    os.system('cls' if os.name == 'nt' else 'clear')
     
     if action == "Search again":
         return main()
